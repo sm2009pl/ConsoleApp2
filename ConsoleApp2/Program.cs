@@ -7,19 +7,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    interface IRzecz
-    {
-        string nazwa { get; set; }
-    }
 
-
-    interface IMenu
-    {
-        void Add(IRzecz rzecz);
-        void Show();
-
-    }
-    class Napoj : IRzecz
+    class Napoj
     {
         public string nazwa { get; set; }
         public Napoj(string name)
@@ -28,7 +17,7 @@ namespace ConsoleApp1
         }
     }
 
-    class Dodatek : IRzecz
+    class Dodatek
     {
         public string nazwa { get; set; }
         public bool stan { get; set; }
