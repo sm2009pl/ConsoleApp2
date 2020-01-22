@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    class Napoj
+    interface IRzecz
+    {
+        string nazwa { get; set; }
+    }
+
+
+    interface IMenu
+    {
+        void Add(IRzecz rzecz);
+        void Show();
+
+    }
+    class Napoj : IRzecz
     {
         public string nazwa { get; set; }
         public Napoj(string name)
@@ -16,7 +28,7 @@ namespace ConsoleApp1
         }
     }
 
-    class Dodatek
+    class Dodatek : IRzecz
     {
         public string nazwa { get; set; }
         public bool stan { get; set; }
@@ -55,7 +67,6 @@ namespace ConsoleApp1
         public void ChooseNapoj()
         {
             int x;
-            Show();
             do
             {
                 x = Convert.ToInt32(Console.ReadLine());
@@ -90,13 +101,27 @@ namespace ConsoleApp1
         public void Show()
         {
             Console.WriteLine("Aktualny stan:");
-            foreach(var item in menu)
+            foreach (var item in menu)
             {
-                Console.WriteLine("{0} - {1}   {2}",item.Key,item.Value.nazwa,item.Value.stan);
+                Console.WriteLine("{0} - {1}   {2}", item.Key, item.Value.nazwa, item.Value.stan);
             }
             Console.WriteLine("Wcisnij 0, by zatwierdzic");
         }
-        public void ChangeState()
+        public void ChangeState(int x)
+        {
+            if (x == 0)
+                return;
+            if (menu[x].stan == true)
+            {
+                menu[x].stan = false;
+            }
+            else
+            {
+                menu[x].stan = true;
+            }
+        }
+
+        public void ChangeStateTillZero()
         {
             int x;
             do
@@ -106,23 +131,15 @@ namespace ConsoleApp1
                 {
                     x = Convert.ToInt32(Console.ReadLine());
                 } while (x < 0 || x > id);
-                if (x == 0)
-                    return;
-                if(menu[x].stan == true)
-                {
-                    menu[x].stan = false;
-                }
-                else
-                {
-                    menu[x].stan = true;
-                }
+                ChangeState(x);
+
             } while (x > 0 && x <= id);
         }
 
-        public string [] GetDodatki()
+        public string[] GetDodatki()
         {
-            string [] str = new string[id+1];
-            for(int i = 1; i <= id;i++)
+            string[] str = new string[id + 1];
+            for (int i = 1; i <= id; i++)
             {
                 if (menu[i].stan == true)
                 {
@@ -180,9 +197,9 @@ namespace ConsoleApp1
             menuDodatek.Add(new Dodatek("cukier"));
             menuDodatek.Add(new Dodatek("mleko"));
 
-
+            menuNapoj.Show();
             menuNapoj.ChooseNapoj();
-            menuDodatek.ChangeState();
+            menuDodatek.ChangeStateTillZero();
 
             print.AddStr(menuNapoj.GetNapoj());
             print.AddStrArr(menuDodatek.GetDodatki());
